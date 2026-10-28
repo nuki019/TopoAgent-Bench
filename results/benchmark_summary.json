@@ -1,0 +1,167 @@
+{
+  "timestamp": "2026-10-28 17:13:54",
+  "models": {
+    "flagship": "qwen3.8-max",
+    "fast": "qwen3.8-27b",
+    "alt_fast": "deepseek-v4.1-flash",
+    "max_concurrency": 5
+  },
+  "task_count": 12,
+  "topology_results": [
+    {
+      "topology": "1. Single-Agent (Fast)",
+      "accuracy": 83.33,
+      "math_acc": 75.0,
+      "code_acc": 100.0,
+      "duohire_acc": 75.0,
+      "avg_wall_latency_ms": 20214.5,
+      "avg_sum_node_latency_ms": 20214.0,
+      "parallel_speedup": 1.0,
+      "avg_tokens": 1310.0,
+      "early_stop_rate": 0.0,
+      "pareto_reward": -0.2429,
+      "pareto_score": 71.26
+    },
+    {
+      "topology": "2. Sequential Chain (3-Hop)",
+      "accuracy": 75.0,
+      "math_acc": 100.0,
+      "code_acc": 50.0,
+      "duohire_acc": 75.0,
+      "avg_wall_latency_ms": 68523.3,
+      "avg_sum_node_latency_ms": 68523.0,
+      "parallel_speedup": 1.0,
+      "avg_tokens": 5829.8,
+      "early_stop_rate": 0.0,
+      "pareto_reward": -2.9677,
+      "pareto_score": 31.99
+    },
+    {
+      "topology": "3. Parallel Star (3x Hetero -> qwen3.8-max)",
+      "accuracy": 91.67,
+      "math_acc": 75.0,
+      "code_acc": 100.0,
+      "duohire_acc": 100.0,
+      "avg_wall_latency_ms": 47073.1,
+      "avg_sum_node_latency_ms": 70550.8,
+      "parallel_speedup": 1.52,
+      "avg_tokens": 5034.8,
+      "early_stop_rate": 0.0,
+      "pareto_score": 60.58
+    },
+    {
+      "topology": "4. MacNet Diamond DAG (Plan -> 2x Parallel -> Synth)",
+      "accuracy": 91.67,
+      "math_acc": 75.0,
+      "code_acc": 100.0,
+      "duohire_acc": 100.0,
+      "avg_wall_latency_ms": 65466.4,
+      "avg_sum_node_latency_ms": 62763.9,
+      "parallel_speedup": 1.04,
+      "avg_tokens": 6417.0,
+      "early_stop_rate": 0.0,
+      "pareto_score": 49.31
+    },
+    {
+      "topology": "5. DyLAN Early-Stop DAG (Dynamic Pruning)",
+      "accuracy": 83.33,
+      "math_acc": 75.0,
+      "code_acc": 100.0,
+      "duohire_acc": 75.0,
+      "avg_wall_latency_ms": 19110.9,
+      "avg_sum_node_latency_ms": 22767.7,
+      "parallel_speedup": 1.22,
+      "avg_tokens": 2145.0,
+      "early_stop_rate": 75.0,
+      "pareto_reward": -0.2295,
+      "pareto_score": 70.56
+    }
+  ],
+  "mcts_search": {
+    "best_config": {
+      "topology": "single",
+      "solver_tier": "fast",
+      "aggregator_tier": "flagship",
+      "early_stopping": true
+    },
+    "best_pareto_reward": -0.4925,
+    "search_history": [
+      {
+        "config": {
+          "topology": "single",
+          "solver_tier": "fast",
+          "aggregator_tier": "flagship",
+          "early_stopping": true,
+          "temperature": 0.3
+        },
+        "accuracy": 0.5,
+        "avg_latency_ms": 18532.34579999844,
+        "avg_tokens": 1318.25,
+        "pareto_reward": -0.492529789999922,
+        "task_count": 4
+      },
+      {
+        "config": {
+          "topology": "chain",
+          "solver_tier": "fast",
+          "aggregator_tier": "flagship",
+          "early_stopping": true,
+          "temperature": 0.3
+        },
+        "accuracy": 0.5,
+        "avg_latency_ms": 65292.16065000219,
+        "avg_tokens": 5575.0,
+        "pareto_reward": -3.0433580325001097,
+        "task_count": 4
+      },
+      {
+        "config": {
+          "topology": "star",
+          "solver_tier": "fast",
+          "aggregator_tier": "flagship",
+          "early_stopping": true,
+          "temperature": 0.3
+        },
+        "accuracy": 0.5,
+        "avg_latency_ms": 24474.250149993168,
+        "avg_tokens": 4439.0,
+        "pareto_reward": -0.9456625074996584,
+        "task_count": 4
+      },
+      {
+        "config": {
+          "topology": "diamond",
+          "solver_tier": "fast",
+          "aggregator_tier": "flagship",
+          "early_stopping": true,
+          "temperature": 0.3
+        },
+        "accuracy": 0.5,
+        "avg_latency_ms": 46195.99364999522,
+        "avg_tokens": 6976.25,
+        "pareto_reward": -2.1586121824997613,
+        "task_count": 4
+      },
+      {
+        "config": {
+          "topology": "dylan_pruned",
+          "solver_tier": "fast",
+          "aggregator_tier": "flagship",
+          "early_stopping": true,
+          "temperature": 0.3
+        },
+        "accuracy": 0.5,
+        "avg_latency_ms": 19148.927624999487,
+        "avg_tokens": 2563.25,
+        "pareto_reward": -0.5856088812499745,
+        "task_count": 4
+      }
+    ]
+  },
+  "distillation_samples_exported": 53,
+  "ablation_finding": {
+    "issue": "Reasoning token budget exhaustion & format override in Aggregator",
+    "before_fix_kimi_k3_acc": 8.33,
+    "after_fix_qwen38_max_acc": 91.67
+  }
+}

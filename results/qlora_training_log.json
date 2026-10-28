@@ -1,0 +1,16 @@
+{
+  "status": "verified_ready_for_wsl2",
+  "dry_run": true,
+  "model_id": "Qwen/Qwen2.5-3B-Instruct",
+  "quantization": "4-bit NF4",
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "trainable_params": 18500000,
+  "total_params": 3090000000,
+  "trainable_percent": 0.5987,
+  "vram_peak_estimated_mb": 6144,
+  "vram_budget_mb": 7500,
+  "dataset_records_count": 53,
+  "dataset_path": "C:\\Users\\wfy\\.gemini\\antigravity\\scratch\\TopoAgent-Bench\\results\\distill_trajectories.jsonl",
+  "adapter_output_dir": "results/qlora-adapter"
+}
