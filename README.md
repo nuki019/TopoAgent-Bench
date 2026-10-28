@@ -42,7 +42,20 @@
 
 ---
 
-## 3. 快速开始 (Quickstart)
+## 3. 本机 WSL2 + RTX 5070 Ti (Blackwell `sm_120`) 4-Bit QLoRA 蒸馏与本地推理实测
+
+利用上述多 Agent 评测导出的 **53 条满分 ShareGPT 黄金轨迹**（[`results/distill_trajectories.jsonl`](./results/distill_trajectories.jsonl)），在本地 **WSL2 (`Ubuntu 22.04`) + NVIDIA GeForce RTX 5070 Ti Laptop GPU (12GB VRAM, `PyTorch 2.11.0+cu128`)** 上完成真机 4-bit NF4 QLoRA 微调与 OpenAI 兼容推理服务压测（完整日志见 [`results/qlora_training_log.json`](./results/qlora_training_log.json) 与 [`results/local_vllm_serving_log.json`](./results/local_vllm_serving_log.json)）：
+
+| 阶段 / 指标项 | 实测配置与真机遥测数据 |
+| :--- | :--- |
+| **硬件与 CUDA 栈** | NVIDIA RTX 5070 Ti Laptop (12GB GDDR7, Blackwell `sm_120`) · `PyTorch 2.11.0+cu128` · `bitsandbytes 0.50.2` |
+| **QLoRA 微调配置** | 基座 `Qwen/Qwen2.5-1.5B-Instruct` · 4-bit NF4 双重量化 · `r=16, alpha=32` · 可训练参数 `18,464,768` (`2.036%`) |
+| **训练收敛表现** | 53 条黄金 DAG 轨迹 × 3 Epochs（总耗时 `425.7s`），Training Loss 从 **`1.1072`** 稳定收敛至 **`0.3904`**（**下降 `-64.7%`**），显存峰值 **`11,306 MB` (`~11.04 GB`)** |
+| **本地推理服务压测** | 本地 `:8000/v1` OpenAI 兼容服务（[`scripts/serve_local_vllm.py`](./scripts/serve_local_vllm.py) 挂载 LoRA Adapter + PyTorch SDPA），实测平均生成吞吐 **`20.84 tokens/s`**（最高 `24.91 tok/s`），推理显存占用仅 **`3,085 MB` (`~3.01 GB`)** |
+
+---
+
+## 4. 快速开始 (Quickstart)
 
 ```bash
 # 1. 运行全部 22 项单元测试（Kahn 拓扑分层、环路检测、并行加速比、DyLAN 早停、MCTS UCB1）
